@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOURISH | Nutrition & Recovery Discovery Platform</title>
+  <meta name="description"
+    content="Discover recovery-focused nutrition, precision meals, biomarker tracking, and verified wellness coaches with NOURISH.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts: Editorial & Modern Lab Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Design System CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- =========================================================================
+       EXPERIMENTAL CURSOR & RADIAL MENU SYSTEM
+       ========================================================================= -->
+
+
+
+  <!-- Ambient Minimal Corner Crest -->
+  <div class="ambient-brand-crest" onclick="window.nourishApp.toggleCursorMenu(true)" style="padding: 10px 18px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <img src="favicon.svg" alt="NOURISH LAB Logo" style="width: 24px; height: 24px; margin-right: 10px;">
+    <span style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; color: var(--text-main); letter-spacing: 0.02em;">NOURISH</span>
+    <span style="font-family: var(--font-sans); font-size: 0.72rem; color: var(--color-terracotta); font-weight: 800; margin-left: 6px; letter-spacing: 0.05em;">LAB</span>
+  </div>
+
+  <div class="ambient-corner-controls">
+    <button class="util-btn" id="theme-toggle-btn" title="Toggle Dark Mode">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <button class="btn-primary trigger-onboarding-btn" style="padding: 8px 18px; font-size: 0.82rem;">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Plan
+    </button>
+    <button class="util-btn hamburger-btn" onclick="document.getElementById('mobile-sidebar-overlay').classList.add('active'); if(window.nourishApp) window.nourishApp.playSound('click');" title="Menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+
+  <!-- Fixed Menu Button -->
+
+
+  <!-- Expanded Cursor Radial Menu Constellation Overlay -->
+  <div class="cursor-menu-overlay" id="cursor-menu-overlay">
+    <div class="radial-menu-constellation" id="radial-constellation">
+      <!-- Ambient Orbit Rings -->
+      <div class="constellation-orbit-ring ring-outer"></div>
+      <div class="constellation-orbit-ring ring-inner"></div>
+
+      <!-- Center Pulsing Core -->
+      <div class="constellation-center-core">N</div>
+
+      <!-- Constellation Nodes matching user specification:
+                   HOME
+              ABOUT     WORK
+             SERVICES   CONTACT
+                   CLOSE
+      -->
+      <!-- TOP: HOME -->
+      <div class="constellation-node node-home" data-target="home">
+        <i class="fa-solid fa-house node-icon"></i>
+        <span>HOME</span>
+      </div>
+
+      <!-- UPPER LEFT: ABOUT -->
+      <div class="constellation-node node-about" data-target="about">
+        <i class="fa-solid fa-compass node-icon"></i>
+        <span>ABOUT</span>
+      </div>
+
+      <!-- UPPER RIGHT: WORK (EXPLORE NUTRITION) -->
+      <div class="constellation-node node-work" data-target="explore">
+        <i class="fa-solid fa-utensils node-icon"></i>
+        <span>WORK</span>
+      </div>
+
+      <!-- LOWER LEFT: SERVICES (RECOVERY HUB & JOURNAL) -->
+      <div class="constellation-node node-services" data-target="recovery-hub">
+        <i class="fa-solid fa-bolt node-icon"></i>
+        <span>SERVICES</span>
+      </div>
+
+      <!-- LOWER RIGHT: CONTACT -->
+      <div class="constellation-node node-contact" data-target="contact">
+        <i class="fa-solid fa-paper-plane node-icon"></i>
+        <span>CONTACT</span>
+      </div>
+
+      <!-- BOTTOM: CLOSE -->
+      <div class="constellation-node node-close" id="constellation-close-btn">
+        <i class="fa-solid fa-xmark"></i>
+        <span>CLOSE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sidebar Overlay (Triggered by Hamburger Button) -->
+  <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay">
+    <div class="mobile-sidebar-content" style="display: flex; flex-direction: column; align-items: center; gap: 24px; width: 80%; max-width: 300px;">
+      <!-- Website Name (Logo) -->
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+        <img src="favicon.svg" alt="NOURISH LAB Logo" style="width: 32px; height: 32px; margin-right: 12px;">
+        <span style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 800; color: #FAF8F5; letter-spacing: 0.02em;">NOURISH</span>
+        <span style="font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-terracotta); font-weight: 800; margin-left: 6px; letter-spacing: 0.05em;">LAB</span>
+      </div>
+      
+      <!-- Theme Button -->
+      <button class="util-btn mobile-theme-btn" onclick="document.body.classList.toggle('dark-mode'); localStorage.setItem('nourish_dark_mode', document.body.classList.contains('dark-mode')); if(window.nourishApp) window.nourishApp.playSound('click');" title="Toggle Dark Mode" style="width: 60px; height: 60px; font-size: 1.5rem; justify-content: center; display: flex;">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      
+      <!-- Plan CTA Button -->
+      <button class="btn-primary trigger-onboarding-btn" onclick="document.getElementById('mobile-sidebar-overlay').classList.remove('active')" style="padding: 16px 32px; font-size: 1.1rem; width: 100%; justify-content: center; display: flex;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Plan
+      </button>
+      
+      <!-- Close Button -->
+      <button class="btn-secondary" onclick="document.getElementById('mobile-sidebar-overlay').classList.remove('active')" style="margin-top: 20px; width: 100%; justify-content: center; display: flex;">
+        <i class="fa-solid fa-xmark"></i> Close
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- SIGNATURE RECOVERY MODE BAR -->
+  <div class="recovery-mode-bar-wrapper">
+    <div class="nourish-container recovery-bar-content">
+      <div class="recovery-bar-title">
+        <i class="fa-solid fa-sliders"></i> Signature Recovery Mode:
+      </div>
+      <div class="recovery-mode-pills">
+        <button class="btn-pill-mode active" data-mode="workout">
+          <span>💪 Workout Recovery</span>
+        </button>
+        <button class="btn-pill-mode" data-mode="sleep">
+          <span>😴 Poor Sleep / CNS</span>
+        </button>
+        <button class="btn-pill-mode" data-mode="energy">
+          <span>⚡ Low Energy Recharge</span>
+        </button>
+        <button class="btn-pill-mode" data-mode="rest">
+          <span>🧘 Rest Day & Joints</span>
+        </button>
+        <button class="btn-pill-mode" data-mode="hydration">
+          <span>💧 Cellular Hydration</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       PAGE 1: HOME VIEW
+       ========================================================================= -->
+  <main class="page-view active-page" id="page-home">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="nourish-container hero-grid">
+        <div class="hero-content-col">
+          <div class="hero-badge-live">
+            <div class="pulse-dot"></div>
+            <span>Adaptive Bio-Recovery Platform</span>
+          </div>
+
+          <h1 class="hero-title">
+            EAT FOR RECOVERY.<br>
+            <span class="accent-italic">NOURISH FOR WHAT'S NEXT.</span>
+          </h1>
+
+          <p class="hero-description">
+            Explore chef-crafted meals, Cronometer-precise nutrient breakdowns, and evidence-based recovery protocols
+            designed around how you live, train, and restore your body.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="window.nourishApp.navigateTo('explore')">
+              <i class="fa-solid fa-compass"></i> Explore Nutrition
+            </button>
+            <button class="btn-secondary trigger-onboarding-btn">
+              <i class="fa-solid fa-dna"></i> Build Personalized Plan
+            </button>
+          </div>
+
+          <!-- Hero Quick Stats -->
+          <div class="hero-stats-row">
+            <div class="hero-stat-item">
+              <h4>99.4%</h4>
+              <p>Biomarker Precision</p>
+            </div>
+            <div class="hero-stat-item">
+              <h4>45 min</h4>
+              <p>Anabolic Window Sync</p>
+            </div>
+            <div class="hero-stat-item">
+              <h4>24+</h4>
+              <p>Clinical Protocols</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual Showcase -->
+        <div class="hero-card-showcase">
+          <div class="hero-main-card" id="hero-main-card">
+            <div class="hero-card-image-wrap">
+              <img id="hero-card-img" src="./images/image-2.png" alt="Featured Recovery Meal" />
+              <div class="hero-card-badge" id="hero-card-badge">💪 Post-Workout Engine</div>
+            </div>
+            <div class="hero-card-details">
+              <div class="hero-card-header-flex">
+                <h3 class="hero-card-title" id="hero-card-title">Wild Salmon Quinoa Recovery Bowl</h3>
+                <span class="hero-card-score" id="hero-card-score">Bio-Score: 98/100</span>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+                Rich in EPA/DHA Omega-3s and complete leucine chains to downregulate DOMS inflammatory cascades.
+              </p>
+              <div class="engine-macro-chips" id="hero-card-macros">
+                <span class="macro-chip cal">580 kcal</span>
+                <span class="macro-chip pro">48g Protein</span>
+                <span class="macro-chip carb">46g Carbs</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Precision Biometric Widget -->
+          <div class="floating-biometric-card">
+            <div class="biometric-dial">98</div>
+            <div class="biometric-info">
+              <h5>Cellular Readiness</h5>
+              <p>Optimal recovery state</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT DOES YOUR BODY NEED TODAY? (SIGNATURE INTERACTIVE ENGINE) -->
+    <section class="recovery-engine-section">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Personalized Physiological Matching</span>
+          <h2 class="section-title">WHAT DOES YOUR BODY NEED TODAY?</h2>
+          <p class="section-description">
+            Select your current physiological state to recalibrate your recommended meals, hydration targets, and
+            recovery routines instantly.
+          </p>
+        </div>
+
+        <!-- Interactive Body Need Selector -->
+        <div class="body-need-pills">
+          <button class="body-need-pill active" data-mode="workout">
+            <span>💪 Muscle Recovery</span>
+          </button>
+          <button class="body-need-pill" data-mode="sleep">
+            <span>😴 Better Sleep & CNS</span>
+          </button>
+          <button class="body-need-pill" data-mode="energy">
+            <span>⚡ Sustained Energy</span>
+          </button>
+          <button class="body-need-pill" data-mode="rest">
+            <span>🧘 Joint & Tendon Rest</span>
+          </button>
+          <button class="body-need-pill" data-mode="hydration">
+            <span>💧 Deep Cellular Hydration</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Recovery Engine Output Card -->
+        <div class="recovery-engine-card">
+          <div class="engine-highlight-bar"></div>
+
+          <div class="engine-left-col">
+            <span
+              style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--color-terracotta); letter-spacing: 0.1em;">
+              TODAY'S CLINICAL RECOVERY PRESCRIPTION
+            </span>
+            <h3 id="engine-title">Workout & Muscle Hyper-Recovery</h3>
+            <p class="engine-tagline" id="engine-tagline">Rapid Anabolic & Myofibrillar Repair</p>
+
+            <div class="engine-advice-box" id="engine-advice">
+              <strong>Clinical Recovery Protocol:</strong> Consume high-bioavailability protein within 45 minutes of
+              mechanical strain to maximize mTOR phosphorylation.
+            </div>
+
+            <!-- Target Metrics -->
+            <div class="engine-target-metrics">
+              <div
+                style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <span
+                  style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">💧
+                  Target Hydration</span>
+                <h5 style="font-size: 1.05rem; font-weight: 800; margin-top: 2px;" id="engine-hydration-val">2,800 ml
+                  (Electrolyte + Sodium Balanced)</h5>
+              </div>
+              <div
+                style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <span
+                  style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">🧘
+                  Rest Activity</span>
+                <h5 style="font-size: 1.05rem; font-weight: 800; margin-top: 2px;" id="engine-rest-val">20-min elevation
+                  + pneumatic compression</h5>
+              </div>
+            </div>
+
+            <!-- Key Nutrients -->
+            <span
+              style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block;">
+              🔬 Targeted Micronutrients & Co-Factors
+            </span>
+            <div class="engine-nutrients-grid" id="engine-nutrients-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Engine Right Col: Recommended Meal Preview -->
+          <div class="engine-right-col">
+            <div class="engine-right-col-header">
+              <h4>Recommended Meal</h4>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-sage);">Target Fit: 99%</span>
+            </div>
+
+            <div class="engine-meal-preview">
+              <div class="engine-meal-img-wrap">
+                <img id="engine-meal-img" src="./images/image-2.png" alt="Meal Preview" />
+              </div>
+              <div class="engine-meal-content">
+                <div>
+                  <h5 class="engine-meal-title" id="engine-meal-title">Wild Salmon Quinoa Recovery Bowl</h5>
+                  <div class="engine-macro-chips" id="engine-meal-macros">
+                    <!-- Macros -->
+                  </div>
+                </div>
+                <button class="btn-primary" style="width: 100%; justify-content: center; padding: 10px 4px; white-space: nowrap; font-size: 0.78rem;"
+                  id="engine-view-meal-btn">
+                  View Full Nutrient Protocol <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRONOMETER × NOOM PRECISION LAB SECTION -->
+    <section class="precision-lab-section">
+      <div class="nourish-container lab-grid">
+        <div>
+          <span class="section-subtitle-tag">Modern Nutrition Science</span>
+          <h2 class="section-title">Precision Data Meets Habit Psychology</h2>
+          <p class="section-description">
+            We merge Cronometer's rigorous 84-biomarker accuracy with Noom's cognitive habit reinforcement. Understand
+            exactly how every gram of protein and milligram of magnesium restores your cells.
+          </p>
+
+          <div class="precision-feature-list">
+            <div class="precision-feature-item">
+              <div class="precision-icon-box"><i class="fa-solid fa-dna"></i></div>
+              <div class="precision-feature-text">
+                <h4>Biomarker & Leucine Threshold Tracking</h4>
+                <p>Ensure every post-exercise meal achieves the 3.0g leucine threshold to trigger full muscle protein
+                  synthesis.</p>
+              </div>
+            </div>
+            <div class="precision-feature-item">
+              <div class="precision-icon-box"><i class="fa-solid fa-shield-virus"></i></div>
+              <div class="precision-feature-text">
+                <h4>Anti-Inflammatory Index Scoring</h4>
+                <p>Quantify dietary polyphenol density to suppress elevated hs-CRP and accelerate joint recovery.</p>
+              </div>
+            </div>
+            <div class="precision-feature-item">
+              <div class="precision-icon-box"><i class="fa-solid fa-brain"></i></div>
+              <div class="precision-feature-text">
+                <h4>Circadian & Behavioral Rest Sync</h4>
+                <p>Time your carbohydrates and amino acids to balance evening cortisol and elevate Slow-Wave Delta
+                  sleep.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Precision Interactive Simulator Card -->
+        <div class="precision-simulator-card">
+          <div class="simulator-header">
+            <div>
+              <div class="simulator-title">Live Biomarker Simulator</div>
+              <span style="font-size: 0.78rem; color: var(--text-muted);">Real-time nutrient assimilation tracker</span>
+            </div>
+            <span class="precision-badge-live">● Active Sync</span>
+          </div>
+
+          <!-- Cronometer Macro Rings -->
+          <div class="macro-rings-row">
+            <div class="macro-ring-container">
+              <svg class="macro-ring-svg" viewBox="0 0 36 36">
+                <path class="macro-ring-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="macro-ring-val ring-val-cal" stroke-dasharray="82, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="macro-ring-label">1,840 kcal</div>
+              <div class="macro-ring-sub">Energy Target</div>
+            </div>
+
+            <div class="macro-ring-container">
+              <svg class="macro-ring-svg" viewBox="0 0 36 36">
+                <path class="macro-ring-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="macro-ring-val ring-val-pro" stroke-dasharray="88, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="macro-ring-label">142g Pro</div>
+              <div class="macro-ring-sub">Leucine Pulse</div>
+            </div>
+
+            <div class="macro-ring-container">
+              <svg class="macro-ring-svg" viewBox="0 0 36 36">
+                <path class="macro-ring-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="macro-ring-val ring-val-carb" stroke-dasharray="76, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="macro-ring-label">168g Carb</div>
+              <div class="macro-ring-sub">Glycogen Restock</div>
+            </div>
+
+            <div class="macro-ring-container">
+              <svg class="macro-ring-svg" viewBox="0 0 36 36">
+                <path class="macro-ring-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="macro-ring-val ring-val-fat" stroke-dasharray="72, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="macro-ring-label">58g Fat</div>
+              <div class="macro-ring-sub">Lipid Barrier</div>
+            </div>
+          </div>
+
+          <!-- Micronutrient Progress Bars -->
+          <div class="micronutrient-bars-box">
+            <div class="micro-bar-row">
+              <div class="micro-bar-header">
+                <span>Magnesium Bisglycinate (CNS & Muscle)</span>
+                <span>420mg / 400mg (105%)</span>
+              </div>
+              <div class="micro-progress-track">
+                <div class="micro-progress-fill fill-terracotta" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="micro-bar-row">
+              <div class="micro-bar-header">
+                <span>Potassium-Sodium Osmolality Balance</span>
+                <span>3,240mg / 3,500mg (92%)</span>
+              </div>
+              <div class="micro-progress-track">
+                <div class="micro-progress-fill fill-blue" style="width: 92%;"></div>
+              </div>
+            </div>
+
+            <div class="micro-bar-row">
+              <div class="micro-bar-header">
+                <span>Omega-3 Marine EPA/DHA (Cytokine Shield)</span>
+                <span>2,400mg / 2,000mg (120%)</span>
+              </div>
+              <div class="micro-progress-track">
+                <div class="micro-progress-fill fill-sage" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED RECOVERY MEALS SHOWCASE -->
+    <section class="meals-grid-section" style="background: var(--bg-subtle);">
+      <div class="nourish-container">
+        <div
+          style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+          <div>
+            <span class="section-subtitle-tag">Chef-Crafted & RD-Formulated</span>
+            <h2 class="section-title">Recovery-Focused Meals</h2>
+            <p class="section-description">High-protein, anti-inflammatory, and hydration-dense recipes.</p>
+          </div>
+          <button class="btn-secondary" onclick="window.nourishApp.navigateTo('explore')">
+            View All 24+ Recipes <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="meals-grid" id="home-featured-meals-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED NUTRITION PLANS -->
+    <section class="precision-lab-section">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Comprehensive Protocols</span>
+          <h2 class="section-title">Featured Nutrition & Recovery Plans</h2>
+          <p class="section-description">Structured multi-week dietary regimens engineered for specific athletic and
+            biological goals.</p>
+        </div>
+
+        <div class="plans-grid" id="home-featured-plans-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCOVER PROFESSIONALS (COACHES & DIETITIANS) -->
+    <section class="precision-lab-section" style="background: var(--bg-subtle);">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Verified Clinical Experts</span>
+          <h2 class="section-title">Connect with Recovery Specialists</h2>
+          <p class="section-description">Book 1-on-1 consultations with Olympic sports dietitians, CNS sleep coaches,
+            and functional medicine physicians.</p>
+        </div>
+
+        <div class="professionals-grid" id="home-professionals-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- POPULAR RECOVERY GUIDES -->
+    <section class="precision-lab-section">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Evidence-Based Research</span>
+          <h2 class="section-title">Popular Recovery Guides & Science</h2>
+          <p class="section-description">Deep molecular dives into nutrient timing, phytomelatonin, and hydration
+            kinetics.</p>
+        </div>
+
+        <div class="plans-grid" id="home-guides-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SUCCESS STORIES & BIOMARKER SHIFTS -->
+    <section class="precision-lab-section" style="background: var(--bg-subtle);">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Real World Impact</span>
+          <h2 class="section-title">Clinical & Community Success Stories</h2>
+          <p class="section-description">See how real athletes and high performers transformed their recovery metrics
+            with NOURISH.</p>
+        </div>
+
+        <div id="home-testimonials-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       PAGE 2: EXPLORE NUTRITION VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-explore">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+          <span class="section-subtitle-tag">Recipe Discovery & Exploration</span>
+          <h1 class="section-title">Explore Recovery Nutrition</h1>
+          <p class="section-description">Filter by macro density, anti-inflammatory index, prep time, and specific
+            biological recovery mode.</p>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="explore-filter-bar">
+          <div class="filter-row-top">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass search-icon-pos"></i>
+              <input type="text" id="explore-search-input"
+                placeholder="Search by ingredient (e.g. salmon, chia, turmeric, bison)..." />
+            </div>
+
+            <select class="filter-select" id="explore-category-select">
+              <option value="all">All Recovery Goals</option>
+              <option value="high-protein">High Protein (Muscle Repair)</option>
+              <option value="sleep">Sleep & Circadian Reset</option>
+              <option value="anti-inflammatory">Anti-Inflammatory & Joints</option>
+              <option value="hydration">Electrolytes & Hydration</option>
+              <option value="energy">Mitochondrial Clean Energy</option>
+            </select>
+
+            <select class="filter-select" id="explore-sort-select">
+              <option value="score">Sort by: Bio-Recovery Score</option>
+              <option value="protein">Sort by: Highest Protein</option>
+              <option value="calories-low">Sort by: Lowest Calories</option>
+              <option value="time">Sort by: Quickest Prep Time</option>
+            </select>
+          </div>
+
+          <!-- Tag Pills -->
+          <div class="filter-tags-scroll">
+            <button class="filter-tag-pill active" data-tag="all">All Recipes</button>
+            <button class="filter-tag-pill" data-tag="High Protein">High Protein</button>
+            <button class="filter-tag-pill" data-tag="Anti-Inflammatory">Anti-Inflammatory</button>
+            <button class="filter-tag-pill" data-tag="Gluten-Free">Gluten-Free</button>
+            <button class="filter-tag-pill" data-tag="Vegan">Plant-Based / Vegan</button>
+            <button class="filter-tag-pill" data-tag="Sleep Enhancer">Sleep Enhancers</button>
+            <button class="filter-tag-pill" data-tag="Hydration">Hydration Bowls</button>
+            <button class="filter-tag-pill" data-tag="Paleo">Paleo & Iron-Rich</button>
+          </div>
+        </div>
+
+        <!-- Meals Grid Container -->
+        <div class="meals-grid" id="explore-meals-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 3: RECOVERY HUB VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-recovery-hub">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Clinical Protocols & Modalities</span>
+          <h1 class="section-title">The Recovery Hub</h1>
+          <p class="section-description">Master post-workout nutrition windows, deep sleep architecture, electrolyte
+            osmolality, and active rest day tissue regeneration.</p>
+        </div>
+
+        <!-- Interactive Recovery Modes Matrix -->
+        <div class="recovery-modes-grid">
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); cursor: pointer;"
+            onclick="window.nourishApp.setRecoveryMode('workout')">
+            <div style="font-size: 2rem; margin-bottom: 12px;">💪</div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">
+              Post-Workout Hypertrophy</h3>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+              Trigger mTORC1, optimize 3.5g leucine pulsing, and restock glycogen within the 45-minute cellular window.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-terracotta);">Activate Protocol
+              →</span>
+          </div>
+
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); cursor: pointer;"
+            onclick="window.nourishApp.setRecoveryMode('sleep')">
+            <div style="font-size: 2rem; margin-bottom: 12px;">😴</div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">Sleep
+              & CNS Restoration</h3>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+              Phytomelatonin, tart cherry anthocyanins, and magnesium bisglycinate to boost slow-wave delta sleep.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-plum);">Activate Protocol →</span>
+          </div>
+
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); cursor: pointer;"
+            onclick="window.nourishApp.setRecoveryMode('hydration')">
+            <div style="font-size: 2rem; margin-bottom: 12px;">💧</div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">
+              Cellular Osmolality</h3>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+              SGLT1 co-transport hydration, Celtic sea salt trace minerals, and potassium to prevent muscle spasms.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-blue);">Activate Protocol →</span>
+          </div>
+
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); cursor: pointer;"
+            onclick="window.nourishApp.setRecoveryMode('rest')">
+            <div style="font-size: 2rem; margin-bottom: 12px;">🧘</div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">Joint
+              & Connective Tissue</h3>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+              Hydrolyzed type I/III collagen peptides, vitamin C, and curcumin to strengthen ligaments and cartilage.
+            </p>
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-sage);">Activate Protocol →</span>
+          </div>
+        </div>
+
+        <!-- Full Nutrition Plans Grid in Hub -->
+        <h2 class="section-title" style="margin-bottom: 24px;">Structured Recovery Plans</h2>
+        <div class="plans-grid" id="plans-full-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 4: DISCOVER PROFESSIONALS VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-professionals">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Expert Clinical Network</span>
+          <h1 class="section-title">Discover Wellness & Recovery Professionals</h1>
+          <p class="section-description">Partner with board-certified sports dietitians, autonomic nervous system
+            coaches, and functional medicine physicians for personalized guidance.</p>
+        </div>
+
+        <div class="professionals-grid" id="professionals-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 5: NUTRITION JOURNAL & BIOMARKER LOG VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-journal">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="journal-date-header">
+          <div>
+            <span class="section-subtitle-tag">Cronometer Precision Log</span>
+            <h1 class="section-title" style="margin-bottom: 0;">Today's Recovery Journal</h1>
+          </div>
+          <button class="btn-primary" onclick="window.nourishApp.openCustomFoodModal()">
+            <i class="fa-solid fa-plus"></i> Log Custom Food / Snack
+          </button>
+        </div>
+
+        <div class="journal-layout-grid">
+          <!-- Left Column: Meals & Hydration -->
+          <div class="journal-main-panel">
+
+            <!-- Daily Biomarker Progress Summary Card -->
+            <div class="journal-summary-card">
+              <h3 style="margin-bottom: 16px; font-size: 1.15rem;">Daily Macronutrient Adherence</h3>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; text-align: center;">
+                <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md);">
+                  <span
+                    style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Calories</span>
+                  <h4 id="journal-calories-progress-text"
+                    style="color: var(--color-terracotta); font-size: 1.05rem; font-weight: 800; margin-top: 4px;">1,840
+                    / 2,450</h4>
+                </div>
+                <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md);">
+                  <span
+                    style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Protein</span>
+                  <h4 id="journal-protein-progress-text"
+                    style="color: var(--color-sage); font-size: 1.05rem; font-weight: 800; margin-top: 4px;">142g / 175g
+                  </h4>
+                </div>
+                <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md);">
+                  <span
+                    style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Carbs</span>
+                  <h4 id="journal-carbs-progress-text"
+                    style="color: var(--color-amber); font-size: 1.05rem; font-weight: 800; margin-top: 4px;">168g /
+                    220g</h4>
+                </div>
+                <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md);">
+                  <span
+                    style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Fat</span>
+                  <h4 id="journal-fat-progress-text"
+                    style="color: var(--color-plum); font-size: 1.05rem; font-weight: 800; margin-top: 4px;">58g / 75g
+                  </h4>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hydration Interactive Tracker -->
+            <div class="hydration-interactive-card">
+              <div class="hydration-header-flex">
+                <div>
+                  <span
+                    style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--color-blue); letter-spacing: 0.08em;">
+                    💧 Cellular Osmolality Tracker
+                  </span>
+                  <h3 style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 800; margin-top: 2px;">
+                    Hydration Intake</h3>
+                </div>
+                <div class="hydration-amount-large" id="journal-water-logged-val">2,400 ml</div>
+              </div>
+
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Click glasses to fill or empty. Target: 3,200 ml (electrolytes included).
+              </p>
+
+              <!-- Interactive Water Glasses -->
+              <div class="hydration-glasses-row" id="journal-water-glasses-row">
+                <!-- Rendered dynamically -->
+              </div>
+
+              <div style="display: flex; gap: 10px;">
+                <button class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;"
+                  onclick="window.nourishApp.addWaterCustom(250)">
+                  +250ml Glass
+                </button>
+                <button class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;"
+                  onclick="window.nourishApp.addWaterCustom(500)">
+                  +500ml Flask (Electrolytes)
+                </button>
+              </div>
+            </div>
+
+            <!-- Logged Meals List -->
+            <div class="meal-log-group">
+              <div class="meal-log-header">
+                <h3 style="font-family: var(--font-serif); font-size: 1.25rem;">Logged Meals Today</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">4 Entries</span>
+              </div>
+
+              <div class="meal-log-items-list" id="journal-logged-meals-list">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Soreness Map & Recovery Notes -->
+          <div class="journal-sidebar">
+
+            <!-- Interactive Soreness Body Map -->
+            <div class="soreness-map-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 800;">
+                  🩺 Soreness & Tissue Status
+                </h4>
+                <span style="font-size: 0.75rem; color: var(--color-terracotta); font-weight: 700;">Tap to cycle</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
+                Log localized muscle tenderness to trigger specific nutrient co-factors.
+              </p>
+
+              <div class="muscle-zone-selector" id="soreness-muscle-selector">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Recovery Notes -->
+            <div class="journal-summary-card" style="margin-top: 24px;">
+              <h4 style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 800; margin-bottom: 10px;">
+                📝 Daily Recovery Notes
+              </h4>
+              <textarea id="journal-notes-input" rows="5"
+                style="width: 100%; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-subtle); color: var(--text-main); font-size: 0.88rem; resize: vertical;">Did 75 mins heavy leg workout. Consumed leucine pulse within 25 mins. Feeling great neuromuscular tone; ready for tart cherry sleep stack.</textarea>
+              <button class="btn-secondary"
+                style="width: 100%; justify-content: center; margin-top: 12px; font-size: 0.85rem;"
+                onclick="window.nourishApp.showToast('💾 Recovery notes saved to cloud journal!')">
+                Save Notes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 6: GUIDES & SCIENCE VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-guides">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Clinical Literature & Articles</span>
+          <h1 class="section-title">Nutrition & Recovery Guides</h1>
+          <p class="section-description">Deep scientific articles written and reviewed by registered dietitians and
+            sports recovery physiologists.</p>
+        </div>
+
+        <div class="plans-grid" id="guides-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 7: ABOUT NOURISH VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-about">
+    <section style="padding: 60px 0;">
+      <div class="nourish-container" style="max-width: 900px;">
+        <div class="section-header" style="text-align: left;">
+          <span class="section-subtitle-tag">Our Philosophy</span>
+          <h1 class="section-title">The Science of NOURISH</h1>
+          <p class="section-description">Why we built the intersection of Cronometer's nutrient accuracy and Noom's
+            behavioral recovery science.</p>
+        </div>
+
+        <div
+          style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 40px; box-shadow: var(--shadow-sm); line-height: 1.8; font-size: 1.05rem; color: var(--text-muted);">
+          <p style="margin-bottom: 20px;">
+            For decades, athletes and wellness seekers have been forced to choose between boring calorie counters with
+            tedious logging or generic recipe websites filled with vague wellness claims.
+          </p>
+          <p style="margin-bottom: 20px;">
+            <strong style="color: var(--text-main);">NOURISH was born to bridge the divide.</strong> We believe that
+            physical recovery is not a passive waiting game—it is an active biochemical process. Every muscle
+            micro-tear, depleted glycogen store, and disrupted sleep cycle is an opportunity for precise nutritional
+            intervention.
+          </p>
+
+          <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-main); margin: 30px 0 14px;">
+            The 3 Pillars of NOURISH</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px;">
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="fa-solid fa-check" style="color: var(--color-terracotta); margin-top: 6px;"></i>
+              <span><strong>1. Biological Timing (Chronobiology):</strong> Nutrients delivered at the exact moment of
+                peak cellular receptivity produce 3x the restorative benefit.</span>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="fa-solid fa-check" style="color: var(--color-sage); margin-top: 6px;"></i>
+              <span><strong>2. Anti-Inflammatory Downregulation:</strong> Modulating post-exercise inflammation without
+                blunting positive athletic adaptations.</span>
+            </li>
+            <li style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="fa-solid fa-check" style="color: var(--color-plum); margin-top: 6px;"></i>
+              <span><strong>3. Behavioral Micro-Routines:</strong> Seamless psychological habit cues inspired by Noom,
+                turning recovery into an effortless lifelong ritual.</span>
+            </li>
+          </ul>
+
+          <div
+            style="background: var(--bg-subtle); border-radius: var(--radius-md); padding: 20px; border-left: 4px solid var(--color-terracotta);">
+            <strong style="color: var(--text-main); display: block; margin-bottom: 4px;">Clinical Advisory
+              Board:</strong>
+            <p style="font-size: 0.92rem;">All NOURISH meal formulations, macronutrient algorithms, and recovery guides
+              are independently audited by CSSD-certified sports dietitians and sports medical doctors.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 8: CONTACT & SMART AI COACH VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-contact">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div class="section-header">
+          <span class="section-subtitle-tag">Instant Recovery Guidance</span>
+          <h1 class="section-title">Ask Nourish AI & Get In Touch</h1>
+          <p class="section-description">Interact with our instant AI Recovery Assistant or submit an inquiry to our
+            clinical team.</p>
+        </div>
+
+        <div class="contact-grid">
+          <!-- Interactive AI Recovery Assistant Chatbot -->
+          <div class="ai-coach-card">
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div
+                  style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-terracotta); color: #FFF; display: flex; align-items: center; justify-content: center;">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                  <h4 style="font-size: 0.95rem; font-weight: 800;">Nourish AI Recovery Coach</h4>
+                  <span style="font-size: 0.72rem; color: var(--color-sage); font-weight: 700;">● Online • Instant
+                    Clinical Advice</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-coach-chat-window" id="ai-coach-chat-window">
+              <div class="ai-chat-bubble bot">
+                👋 Hello Alex! I am your <strong>NOURISH AI Recovery Coach</strong>. How are you feeling right now?
+                (e.g. <em>"My quads are super sore"</em>, <em>"Can't sleep tonight"</em>, <em>"What should I eat
+                  post-workout?"</em>)
+              </div>
+            </div>
+
+            <div class="ai-chat-input-bar">
+              <input type="text" id="ai-chat-input" placeholder="Type your symptom or recovery question..." />
+              <button class="btn-primary" id="ai-chat-send-btn" style="padding: 10px 18px;">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Contact Inquiry Form -->
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm);">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">
+              Clinical Partnerships & Support</h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">Reach our clinical
+              nutritionists or support team.</p>
+
+            <form
+              onsubmit="event.preventDefault(); window.nourishApp.showToast('📬 Message received! Our clinical team will respond within 4 hours.');"
+              style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <label
+                  style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Full
+                  Name</label>
+                <input type="text" required value="Alex Mercer"
+                  style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+              </div>
+              <div>
+                <label
+                  style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Email
+                  Address</label>
+                <input type="email" required value="alex.mercer@nourish.io"
+                  style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+              </div>
+              <div>
+                <label
+                  style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Topic</label>
+                <select
+                  style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main); font-weight: 600;">
+                  <option>Nutritional Recovery Protocol Inquiry</option>
+                  <option>Coach Consultation Rescheduling</option>
+                  <option>Clinical Lab Partnership</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Message</label>
+                <textarea rows="4" placeholder="How can we assist your recovery journey?"
+                  style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);"></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="margin-top: 8px;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Map Section -->
+        <div
+          style="margin-top: 50px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);">
+          <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 800; margin-bottom: 16px;">Our
+            Headquarters</h3>
+          <div style="border-radius: var(--radius-md); overflow: hidden; height: 350px;">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215259461132!2d-73.98782922437603!3d40.75727933485746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div
+          style="margin-top: 50px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm);">
+          <h3
+            style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 800; margin-bottom: 24px; text-align: center;">
+            Frequently Asked Questions</h3>
+
+          <div class="faq-container" style="display: flex; flex-direction: column; gap: 16px;">
+            <details class="faq-item"
+              style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; background: var(--bg-main); cursor: pointer;">
+              <summary
+                style="font-weight: 700; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                How quickly will the AI Recovery Coach respond?
+                <i class="fa-solid fa-chevron-down"
+                  style="color: var(--color-terracotta); transition: transform 0.3s ease;"></i>
+              </summary>
+              <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Our AI coach
+                responds instantly. For clinical inquiries that require human review, our certified sports dietitians
+                typically respond within 4 hours during business days.</p>
+            </details>
+
+            <details class="faq-item"
+              style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; background: var(--bg-main); cursor: pointer;">
+              <summary
+                style="font-weight: 700; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                Are the nutrition plans personalized?
+                <i class="fa-solid fa-chevron-down"
+                  style="color: var(--color-terracotta); transition: transform 0.3s ease;"></i>
+              </summary>
+              <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Yes, all our
+                plans are tailored to your specific biomarker data, training intensity, and recovery goals. The AI
+                adapts your macros dynamically based on your daily inputs.</p>
+            </details>
+
+            <details class="faq-item"
+              style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; background: var(--bg-main); cursor: pointer;">
+              <summary
+                style="font-weight: 700; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                Can I integrate this with my fitness tracker?
+                <i class="fa-solid fa-chevron-down"
+                  style="color: var(--color-terracotta); transition: transform 0.3s ease;"></i>
+              </summary>
+              <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Absolutely.
+                NOURISH Lab syncs perfectly with Apple Health, Garmin, Oura, and Whoop to pull in sleep data, HRV, and
+                daily energy expenditure for real-time recovery protocol adjustments.</p>
+            </details>
+
+            <details class="faq-item"
+              style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; background: var(--bg-main); cursor: pointer;">
+              <summary
+                style="font-weight: 700; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                What happens if I miss a scheduled recovery meal?
+                <i class="fa-solid fa-chevron-down"
+                  style="color: var(--color-terracotta); transition: transform 0.3s ease;"></i>
+              </summary>
+              <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">No problem at
+                all! The AI will automatically recalculate your remaining macros for the day and suggest an optimized
+                next meal or a specialized nutrient-dense snack to keep your recovery on track.</p>
+            </details>
+
+            <details class="faq-item"
+              style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; background: var(--bg-main); cursor: pointer;">
+              <summary
+                style="font-weight: 700; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                Is the platform suitable for injury recovery?
+                <i class="fa-solid fa-chevron-down"
+                  style="color: var(--color-terracotta); transition: transform 0.3s ease;"></i>
+              </summary>
+              <p style="margin-top: 12px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">Yes, we have
+                specialized protocols like the 'Joint & Tendon Shield' that focus on collagen synthesis, micronutrient
+                timing, and anti-inflammatory diets specifically formulated for structural tissue repair.</p>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       PAGE 9: DASHBOARD VIEW
+       ========================================================================= -->
+  <main class="page-view" id="page-dashboard">
+    <section style="padding: 50px 0;">
+      <div class="nourish-container">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <span class="section-subtitle-tag">Personalized Performance Hub</span>
+            <h1 class="section-title" style="margin-bottom: 0;">Welcome Back, Alex</h1>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn-secondary"
+              onclick="window.nourishApp.showToast('📊 Exporting Comprehensive 30-Day Biomarker PDF Report...')">
+              <i class="fa-solid fa-file-arrow-down"></i> Export Report
+            </button>
+            <button class="btn-primary trigger-onboarding-btn">
+              <i class="fa-solid fa-sliders"></i> Recalibrate Targets
+            </button>
+          </div>
+        </div>
+
+        <!-- Top Metric Summary Cards -->
+        <div class="dashboard-grid-top">
+          <div class="dash-metric-card">
+            <div class="dash-metric-header">
+              <span>Recovery Readiness</span>
+              <i class="fa-solid fa-heart-pulse" style="color: var(--color-sage);"></i>
+            </div>
+            <div class="dash-metric-value" id="dash-readiness-score" style="color: var(--color-sage);">92%</div>
+            <div class="dash-metric-footer positive">
+              <i class="fa-solid fa-arrow-trend-up"></i> +8% vs. last week (Optimal)
+            </div>
+          </div>
+
+          <div class="dash-metric-card">
+            <div class="dash-metric-header">
+              <span>Calories Logged</span>
+              <i class="fa-solid fa-fire" style="color: var(--color-terracotta);"></i>
+            </div>
+            <div class="dash-metric-value" id="dash-calories-val" style="color: var(--color-terracotta);">1,840 kcal
+            </div>
+            <div class="dash-metric-footer optimal">
+              Target: 2,450 kcal (75% reached)
+            </div>
+          </div>
+
+          <div class="dash-metric-card">
+            <div class="dash-metric-header">
+              <span>Protein Synthesis</span>
+              <i class="fa-solid fa-dumbbell" style="color: var(--color-amber);"></i>
+            </div>
+            <div class="dash-metric-value" id="dash-protein-val" style="color: var(--color-amber);">142g</div>
+            <div class="dash-metric-footer positive">
+              3/3 Leucine Pulses Achieved
+            </div>
+          </div>
+
+          <div class="dash-metric-card">
+            <div class="dash-metric-header">
+              <span>Sleep & CNS Restore</span>
+              <i class="fa-solid fa-moon" style="color: var(--color-plum);"></i>
+            </div>
+            <div class="dash-metric-value" style="color: var(--color-plum);">7.8 hrs</div>
+            <div class="dash-metric-footer sleep">
+              1h 42m Deep Delta Sleep
+            </div>
+          </div>
+        </div>
+
+        <!-- 7-Day Trend Chart & Consultations Grid -->
+        <div class="dashboard-trend-grid">
+          <!-- SVG 7-Day Trend Chart -->
+          <div class="dash-chart-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.25rem;">7-Day Recovery Readiness Trend</h3>
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Calculated from HRV, leucine intake & sleep
+                  delta</span>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-sage);">Avg: 88.4%</span>
+            </div>
+
+            <svg class="chart-svg-container" viewBox="0 0 500 180">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#C85A32" stop-opacity="0.35" />
+                  <stop offset="100%" stop-color="#C85A32" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="40" y1="30" x2="480" y2="30" stroke="var(--border-subtle)" stroke-dasharray="4" />
+              <line x1="40" y1="80" x2="480" y2="80" stroke="var(--border-subtle)" stroke-dasharray="4" />
+              <line x1="40" y1="130" x2="480" y2="130" stroke="var(--border-subtle)" stroke-dasharray="4" />
+
+              <!-- Area Fill -->
+              <polygon points="60,110 120,95 180,120 240,75 300,60 360,50 420,40 420,150 60,150"
+                fill="url(#chartGrad)" />
+
+              <!-- Trend Line -->
+              <polyline points="60,110 120,95 180,120 240,75 300,60 360,50 420,40" fill="none"
+                stroke="var(--color-terracotta)" stroke-width="3" stroke-linecap="round" />
+
+              <!-- Data Points -->
+              <circle cx="60" cy="110" r="4" fill="var(--color-terracotta)" />
+              <circle cx="120" cy="95" r="4" fill="var(--color-terracotta)" />
+              <circle cx="180" cy="120" r="4" fill="var(--color-terracotta)" />
+              <circle cx="240" cy="75" r="4" fill="var(--color-terracotta)" />
+              <circle cx="300" cy="60" r="4" fill="var(--color-terracotta)" />
+              <circle cx="360" cy="50" r="4" fill="var(--color-terracotta)" />
+              <circle cx="420" cy="40" r="5" fill="#FFF" stroke="var(--color-terracotta)" stroke-width="3" />
+
+              <!-- Day Labels -->
+              <text x="50" y="170" font-size="11" fill="var(--text-muted)">Mon</text>
+              <text x="110" y="170" font-size="11" fill="var(--text-muted)">Tue</text>
+              <text x="170" y="170" font-size="11" fill="var(--text-muted)">Wed</text>
+              <text x="230" y="170" font-size="11" fill="var(--text-muted)">Thu</text>
+              <text x="290" y="170" font-size="11" fill="var(--text-muted)">Fri</text>
+              <text x="350" y="170" font-size="11" fill="var(--text-muted)">Sat</text>
+              <text x="410" y="170" font-size="11" fill="var(--color-terracotta)" font-weight="bold">Today</text>
+            </svg>
+          </div>
+
+          <!-- Booked Consultations -->
+          <div class="dash-chart-card">
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: 16px;">Scheduled Consultations
+            </h3>
+            <div id="dash-consultations-list">
+              <!-- Populated by JavaScript -->
+            </div>
+            <button class="btn-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem;"
+              onclick="window.nourishApp.navigateTo('professionals')">
+              <i class="fa-solid fa-calendar-plus"></i> Book Another Specialist
+            </button>
+          </div>
+        </div>
+
+        <!-- Saved Meals Showcase in Dashboard -->
+        <div class="dash-chart-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-family: var(--font-serif); font-size: 1.25rem;">Saved Recovery Meals Collection</h3>
+            <button class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;"
+              onclick="window.nourishApp.navigateTo('explore')">Browse More</button>
+          </div>
+          <div id="dash-saved-meals-grid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       MODALS
+       ========================================================================= -->
+
+  <!-- Modal 1: Cronometer-grade Detailed Meal Modal -->
+  <div class="modal-overlay" id="meal-details-modal">
+    <div class="modal-container">
+      <button class="modal-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div id="meal-modal-inner-content">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Coach Consultation Booking Modal -->
+  <div class="modal-overlay" id="coach-booking-modal">
+    <div class="modal-container" style="max-width: 600px;">
+      <button class="modal-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div id="coach-booking-modal-inner">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Noom-style Behavioral Onboarding Modal -->
+  <div class="modal-overlay" id="onboarding-modal">
+    <div class="modal-container" style="max-width: 680px;">
+      <button class="modal-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div id="onboarding-modal-inner">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Custom Food Logger Modal -->
+  <div class="modal-overlay" id="custom-food-modal">
+    <div class="modal-container" style="max-width: 500px;">
+      <button class="modal-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div style="padding: 36px;">
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Log Custom
+          Food</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Enter nutritional values for your
+          custom dish or snack.</p>
+
+        <form onsubmit="window.nourishApp.saveCustomFood(event)"
+          style="display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <label
+              style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Food
+              / Recipe Name</label>
+            <input type="text" id="custom-food-name" required placeholder="E.g. Sprouted Oats with Whey & Blueberries"
+              style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label
+                style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Calories
+                (kcal)</label>
+              <input type="number" id="custom-food-cal" required value="350"
+                style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+            </div>
+            <div>
+              <label
+                style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Meal
+                Category</label>
+              <select id="custom-food-time"
+                style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main); font-weight: 600;">
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+                <option>Recovery Snack</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <div>
+              <label
+                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--color-sage); display: block; margin-bottom: 4px;">Protein
+                (g)</label>
+              <input type="number" id="custom-food-pro" required value="28"
+                style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+            </div>
+            <div>
+              <label
+                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--color-amber); display: block; margin-bottom: 4px;">Carbs
+                (g)</label>
+              <input type="number" id="custom-food-carb" required value="38"
+                style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+            </div>
+            <div>
+              <label
+                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--color-plum); display: block; margin-bottom: 4px;">Fat
+                (g)</label>
+              <input type="number" id="custom-food-fat" required value="10"
+                style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-medium); background: var(--bg-subtle); color: var(--text-main);" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 10px; justify-content: center;">
+            <i class="fa-solid fa-check"></i> Add to Today's Journal
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- =========================================================================
+       SCROLL TO TOP
+       ========================================================================= -->
+  <div class="floating-controls-wrapper">
+    <button class="fixed-menu-btn" onclick="window.nourishApp.toggleCursorMenu(true)">
+      <div class="cursor-dot"></div>
+      <span>MENU</span>
+    </button>
+    <button id="scroll-to-top-btn" class="scroll-to-top" aria-label="Scroll to top"
+      onclick="window.scrollTo({top: 0, behavior: 'smooth'}); if(window.nourishApp) window.nourishApp.playSound('click');">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+  </div>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="nourish-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="favicon.svg" alt="NOURISH LAB Logo" style="width: 32px; height: 32px; margin-right: 12px;">
+            <span style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 800; color: #FAF8F5; letter-spacing: 0.02em;">NOURISH</span>
+            <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--color-terracotta); font-weight: 800; margin-left: 6px; letter-spacing: 0.05em;">LAB</span>
+          </div>
+          <p style="font-size: 0.88rem; color: #A1ACA6; line-height: 1.6; margin-bottom: 20px;">
+            The premier nutrition and recovery exploration platform. Merging Cronometer's micronutrient precision with
+            Noom's cognitive habit architecture.
+          </p>
+          <div class="footer-social-wrap">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-spotify"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Recovery Hub</h4>
+          <ul>
+            <li><a href="#"
+                onclick="window.nourishApp.setRecoveryMode('workout'); window.nourishApp.navigateTo('recovery-hub')">Workout
+                Hypertrophy</a></li>
+            <li><a href="#"
+                onclick="window.nourishApp.setRecoveryMode('sleep'); window.nourishApp.navigateTo('recovery-hub')">Circadian
+                & Sleep Reset</a></li>
+            <li><a href="#"
+                onclick="window.nourishApp.setRecoveryMode('hydration'); window.nourishApp.navigateTo('recovery-hub')">Cellular
+                Hydration</a></li>
+            <li><a href="#"
+                onclick="window.nourishApp.setRecoveryMode('rest'); window.nourishApp.navigateTo('recovery-hub')">Joint
+                & Tendon Shield</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="#" onclick="window.nourishApp.navigateTo('explore')">Explore 24+ Meals</a></li>
+            <li><a href="#" onclick="window.nourishApp.navigateTo('professionals')">Find Nutritionists</a></li>
+            <li><a href="#" onclick="window.nourishApp.navigateTo('journal')">Daily Biomarker Journal</a></li>
+            <li><a href="#" onclick="window.nourishApp.navigateTo('guides')">Clinical Guides</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Clinical Recovery Digest</h4>
+          <p style="font-size: 0.84rem; color: #A1ACA6; margin-bottom: 14px;">
+            Get weekly evidence-based recovery protocols and biomarker insights delivered to your inbox.
+          </p>
+          <form
+            onsubmit="event.preventDefault(); window.nourishApp.showToast('🎉 Subscribed to Weekly Clinical Digest!');"
+            style="display: flex; gap: 8px;">
+            <input type="email" required placeholder="Your email address"
+              style="padding: 10px 14px; border-radius: var(--radius-full); border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #FFF; font-size: 0.85rem; flex-grow: 1;" />
+            <button type="submit" class="btn-primary" style="padding: 10px 16px;">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 NOURISH Labs Inc. All rights reserved. • Recover Better. Nourish Smarter.
+        </div>
+        <div class="footer-legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Clinical Disclaimers</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
